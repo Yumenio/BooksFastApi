@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi import status
 
+from .db import Base, engine
+
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -27,3 +30,4 @@ def delete_book(id):
 @app.get("/books")
 def read_books_list():
     return "read list"
+
