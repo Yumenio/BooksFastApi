@@ -63,19 +63,21 @@ def read_books_list(session = Depends(get_db)):
     return book_list
 
 @router.put("/{id}")
-def update_book(id, name: str, author: str, year: int, price: float, availability: int, session = Depends(get_db)):
-    book = session.query(Book).get(id)
-    if not book:
+# def update_book(id, name: str, author: str, year: int, price: float, availability: int, session = Depends(get_db)):
+def update_book(id, book: BookRequestCreate, session = Depends(get_db)):
+    dbook = session.query(Book).get(id)
+    if not dbook:
         raise HTTPException(status_code=404, detail='Book not found')
 
-    book.name = name
-    book.author = author
-    book.year = year
-    book.price = price
-    book.availability = availability
+    
+    dbook.name = book.name
+    dbook.author = book.author
+    dbook.year = book.year
+    dbook.price = book.price
+    dbook.availability = book.availability
     session.commit()
 
-    return book
+    return dbook
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_book(id, session = Depends(get_db)):

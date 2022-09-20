@@ -60,7 +60,11 @@ def test_update(client):
         )
     assert ans.status_code == 201
 
-    data["name"] = "brandon"
+    data["name"] = "twok"
+    data["author"] = "brandon sanderson"
+    data["year"] = 2011
+    data["price"] = 13.55
+    data["availability"] = 6
 
     ans = client.put(
         "/books/1",
