@@ -78,6 +78,7 @@ def update_book(id, book: BookRequestCreate, session = Depends(get_db)):
     session.commit()
 
     return dbook
+    
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_book(id, session = Depends(get_db)):
