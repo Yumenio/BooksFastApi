@@ -14,7 +14,7 @@ router = APIRouter()
 #     return {"msg" : "Hello World"}
 
 
-@router.post("/books", response_model=BookRequest, status_code=status.HTTP_201_CREATED)
+@router.post("/create", response_model=BookRequest, status_code=status.HTTP_201_CREATED)
 def create_book(book: BookRequestCreate, session = Depends(get_db)):
     new_book = Book(
         name = book.name,
@@ -30,7 +30,7 @@ def create_book(book: BookRequestCreate, session = Depends(get_db)):
     return new_book
 
 
-@router.post("/books", response_model=BookRequest, status_code=status.HTTP_201_CREATED)
+@router.post("/create_id", response_model=BookRequest, status_code=status.HTTP_201_CREATED)
 def create_book_(book: BookRequest, session = Depends(get_db)):
     new_book = Book(
         id = book.id,

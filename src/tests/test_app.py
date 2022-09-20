@@ -6,7 +6,7 @@
 
 def test_create(client):
     ans = client.post(
-        "/books/books",
+        "/books/create",
         json={
             "name": "string",
             "author": "string",
@@ -29,7 +29,7 @@ def test_create(client):
 
 def test_read(client):
     ans = client.post(
-        "/books/books",
+        "/books/create",
         json={
             "name": "string",
             "author": "string",
@@ -45,28 +45,29 @@ def test_read(client):
 def test_read_all(client):
     ans = client.get("/books/")
     
-# def test_update(client):
-#     data = {
-#         "name": "string",
-#         "author": "string",
-#         "year": 0,
-#         "price": 0,
-#         "availability": 0
-#     }
-#     ans = client.post(
-#         "/books/books",
-#         json=data
-#         )
-#     assert ans.status_code == 201
+def test_update(client):
+    data = {
+        "id": 1,
+        "name": "string",
+        "author": "string",
+        "year": 0,
+        "price": 0,
+        "availability": 0
+    }
+    ans = client.post(
+        "/books/create_id",
+        json=data
+        )
+    assert ans.status_code == 201
 
-#     data["name"] = "brandon"
+    data["name"] = "brandon"
 
-#     ans = client.put(
-#         "/books/1",
-#         json=data
-#     )
-#     assert ans.status_code == 200
-#     assert ans.json() == { "id": 1, "name": "twok", "author": "brandon sanderson", "year": 2011, "price": 13.55, "availability": 6 }
+    ans = client.put(
+        "/books/1",
+        json=data
+    )
+    assert ans.status_code == 200
+    assert ans.json() == { "id": 1, "name": "twok", "author": "brandon sanderson", "year": 2011, "price": 13.55, "availability": 6 }
 
 def test_delete(client):
     data = {
@@ -76,7 +77,7 @@ def test_delete(client):
         "price": 0,
         "availability": 0
     }
-    ans = client.post("/books/books", json=data)
+    ans = client.post("/books/create", json=data)
     assert ans.status_code == 201
 
     ans = client.delete("/books/1")
