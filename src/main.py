@@ -2,7 +2,8 @@ from urllib import response
 from fastapi import FastAPI, status, HTTPException, Depends
 from src.schemas import BookRequest, BookRequestCreate
 from sqlalchemy.orm import class_mapper
-from .db import Base, engine, Book, LocalSession
+from .db import Base, engine, LocalSession
+from .models.books import Book
 
 from pydantic import BaseModel
 from typing import List
@@ -20,7 +21,7 @@ def get_session():
 
 @app.get("/")
 def root():
-    return {"mssg" : "hello world"}
+    return {"msg" : "Hello World"}
 
 
 @app.post("/books", response_model=BookRequest, status_code=status.HTTP_201_CREATED)
@@ -29,9 +30,27 @@ def create_book(book: BookRequestCreate, session = Depends(get_session)):
     new_book = Book(
         name = book.name,
         author = book.author,
+        year = book.year,
         price = book.price,
         availability = book.availability
-        # year_published = book.year_published
+    )
+    session.add(new_book)
+    session.commit()
+    session.refresh(new_book)
+
+    return new_book
+
+
+@app.post("/books", response_model=BookRequest, status_code=status.HTTP_201_CREATED)
+def create_book_(book: BookRequest, session = Depends(get_session)):
+    print('breakpoint')
+    new_book = Book(
+        id = book.id,
+        name = book.name,
+        author = book.author,
+        year = book.year,
+        price = book.price,
+        availability = book.availability
     )
     session.add(new_book)
     session.commit()
@@ -56,13 +75,14 @@ def read_books_list(session = Depends(get_session)):
     return book_list
 
 @app.put("/books/{id}")
-def update_book(id, name: str, author: str, price: float, availability: int, session = Depends(get_session)):
+def update_book(id, name: str, author: str, year: int, price: float, availability: int, session = Depends(get_session)):
     book = session.query(Book).get(id)
     if not book:
         raise HTTPException(status_code=404, detail='Book not found')
 
     book.name = name
     book.author = author
+    book.year = year
     book.price = price
     book.availability = availability
     session.commit()
