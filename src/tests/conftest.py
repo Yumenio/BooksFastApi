@@ -3,16 +3,17 @@ from fastapi import FastAPI
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
-
+from ..apis.base import api_router
 from ..db import Base, get_db
 
 
 def start_app():
     app = FastAPI()
+    app.include_router(api_router)
     return app
 
 database_url = 'sqlite:///testdb.db'
-engine = create_engine(database_url)
+engine = create_engine(database_url, connect_args={"check_same_thread": False})
 TestSession = sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)
 
 @pytest.fixture(scope="function")
