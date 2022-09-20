@@ -55,7 +55,7 @@ def test_update(client):
         "availability": 0
     }
     ans = client.post(
-        "/books/create_id",
+        "/books/create",
         json=data
         )
     assert ans.status_code == 201

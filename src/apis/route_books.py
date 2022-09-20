@@ -30,22 +30,6 @@ def create_book(book: BookRequestCreate, session = Depends(get_db)):
     return new_book
 
 
-@router.post("/create_id", response_model=BookRequest, status_code=status.HTTP_201_CREATED)
-def create_book_(book: BookRequest, session = Depends(get_db)):
-    new_book = Book(
-        id = book.id,
-        name = book.name,
-        author = book.author,
-        year = book.year,
-        price = book.price,
-        availability = book.availability
-    )
-    session.add(new_book)
-    session.commit()
-    session.refresh(new_book)
-
-    return new_book
-
 @router.get("/{id}", response_model=BookRequest)
 def read_book(id, session = Depends(get_db)):
     book = session.query(Book).get(id)
@@ -78,7 +62,7 @@ def update_book(id, book: BookRequestCreate, session = Depends(get_db)):
     session.commit()
 
     return dbook
-    
+
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_book(id, session = Depends(get_db)):
